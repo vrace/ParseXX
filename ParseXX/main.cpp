@@ -93,8 +93,8 @@ struct Parser
     template <class U>
     Parser<U, X> map(std::function<U (T)> f)
     {
-        return Parser<U, X>([this, f](const X &input) -> Optional<U> {
-            return this->parse(input).map(f);
+        return this->flatMap<U>([f](const T &input) -> Parser<U, X> {
+            return Parser<U, X>::unit(f(input));
         });
     }
     
